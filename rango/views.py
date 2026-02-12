@@ -1,8 +1,15 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from rango.models import Category
 
 def index(request):
-    context_dict = {'boldmessage': 'crash course to Django'}
+    category_list = Category.objects.order_by('-likes')[:5]
+
+    context_dict = {
+        'boldmessage': 'crash course to Django',
+        'categories': category_list
+    }
+
     return render(request, 'rango/index.html', context=context_dict)
 
 def about(request):

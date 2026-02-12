@@ -7,6 +7,7 @@
 
 <body>
     <h1>Rango says...</h1>
+
     <img src="{% static 'images/rango.jpg' %}" alt="Rango">
 
     <div>
@@ -16,6 +17,18 @@
 
     <div>
         <a href="/rango/about/">About</a>
+    </div>
+
+    <div>
+        {% if categories %}
+            <ul>
+                {% for category in categories %}
+                    <li>{{ category.name }} - {{ category.likes }} likes</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <strong>No categories present.</strong>
+        {% endif %}
     </div>
 
 </body>
