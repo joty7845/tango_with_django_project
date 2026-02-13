@@ -30,6 +30,9 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
+
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -50,7 +53,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+MEDIA_DIR = os.path.join(BASE_DIR, 'media')
+
+
 ROOT_URLCONF = 'tango_with_django_project.urls'
+
+
 
 TEMPLATES = [
     {
@@ -59,6 +69,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.media',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
@@ -122,3 +133,13 @@ STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = '/rango/'
 LOGOUT_REDIRECT_URL = '/rango/'
+
+
+
+STATICFILES_DIRS = [STATIC_DIR]
+MEDIA_DIR = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = MEDIA_DIR
+MEDIA_URL = '/media/'
+
+LOGIN_URL = '/rango/login/'
+

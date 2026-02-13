@@ -1,0 +1,27 @@
+{% extends 'rango/base.html' %}
+{% load static %}
+
+{% block body_block %}
+
+<h1>Rango says...</h1>
+<p>Rango says hey there partner!</p>
+
+{% if user.is_authenticated %}
+    howdy {{ user.username }}!
+{% endif %}
+
+<img src="{% static 'images/rango.jpg' %}" alt="Rango">
+
+<a href="/rango/about/">About</a>
+
+{% if categories %}
+    <ul>
+        {% for category in categories %}
+            <li>{{ category.name }} - {{ category.likes }} likes</li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <strong>No categories present.</strong>
+{% endif %}
+
+{% endblock %}
