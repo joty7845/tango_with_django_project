@@ -4,6 +4,8 @@ from rango.models import Category, Page
 from rango.forms import CategoryForm, PageForm
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
+from rango.forms import UserForm
+from django.contrib.auth import login
 
 
 def index(request):
@@ -83,6 +85,26 @@ def add_page(request, category_name_slug):
     return render(request, 'rango/add_page.html', {'form': form, 'category': category})
 
 
+def register(request):
+    registered = False
 
+    if request.method == 'POST':
+        user_form = UserForm(data=request.POST)
+
+        if user_form.is_valid():
+            user = user_form.save()
+            user.set_password(user.password)
+            user.save()
+
+            login(request, user)
+            registered = True
+        else:
+            print(user_form.errors)
+    else:
+        user_form = UserForm()
+
+    return render(request, 'rango/register.html',
+                  {'user_form': user_form,
+                   'registered': registered})
 
 
