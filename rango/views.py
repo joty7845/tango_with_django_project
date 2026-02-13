@@ -6,24 +6,38 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from rango.forms import UserForm
 from django.contrib.auth import login
+from datetime import datetime
 
 
 def index(request):
-    category_list = Category.objects.order_by('-likes')[:5]
+    visits = request.session.get('visits', 0)
+    last_visit = request.session.get('last_visit', None)
 
-    context_dict = {
-        'boldmessage': 'crash course to Django',
-        'categories': category_list
-    }
+    if last_visit:
+        last_visit_time = datetime.strptime(last_visit[:-7], "%Y-%m-%d %H:%M:%S")
+    else:
+        last_visit_time = None
+
+    if last_visit_time:
+        if (datetime.now() - last_visit_time).days >= 1:
+            visits += 1
+            request.session['last_visit'] = str(datetime.now())
+    else:
+        visits += 1
+        request.session['last_visit'] = str(datetime.now())
+
+    request.session['visits'] = visits
+
+    category_list = Category.objects.order_by('-likes')[:5]
+    context_dict = {'categories': category_list}
 
     return render(request, 'rango/index.html', context=context_dict)
 
-
 def about(request):
-    return HttpResponse(
-        "Rango says here is the about page. "
-        "<a href='/rango/'>Index</a>"
-    )
+    visits = request.session.get('visits', 0)
+    context_dict = {'visits': visits}
+    return render(request, 'rango/about.html', context=context_dict)
+
 
 
 def show_category(request, category_name_slug):
