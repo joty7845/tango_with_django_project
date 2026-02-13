@@ -27,7 +27,13 @@ def index(request):
     request.session['visits'] = visits
 
     category_list = Category.objects.order_by('-likes')[:5]
-    return render(request, 'rango/index.html', {'categories': category_list})
+
+    context_dict = {
+        'categories': category_list,
+        'boldmessage': "Crunchy, creamy, cookie, candy, cupcake!"
+    }
+
+    return render(request, 'rango/index.html', context=context_dict)
 
 
 def about(request):
@@ -41,6 +47,7 @@ def show_category(request, category_name_slug):
     try:
         category = Category.objects.get(slug=category_name_slug)
         pages = Page.objects.filter(category=category)
+
         context_dict['category'] = category
         context_dict['pages'] = pages
     except Category.DoesNotExist:
@@ -149,6 +156,3 @@ def user_logout(request):
 @login_required
 def restricted(request):
     return render(request, 'rango/restricted.html')
-
-
-
